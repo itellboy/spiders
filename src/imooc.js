@@ -1,5 +1,3 @@
-import { Z_FIXED } from 'zlib';
-
 /**
  * 爬取慕课网免费课程数据
  * created by itellboy on 2018-4-25
@@ -14,7 +12,7 @@ const rootHost = 'https://www.imooc.com';
 // 课程数据
 let lessonData = [];
 // 页数
-let page = 1;
+let page = 35;
 /**
  * 抓取html页面
  * @param {页面url} url 
@@ -34,8 +32,8 @@ function getHtml(url) {
 
     getHtml(rootHost + '/course/list?page=' + (++page));
   }).catch((e) => {
-    fs.exists(__dirname + '/tmp', (exists) => {
-      exists ? '' : fs.mkdir('tmp');
+    fs.exists('tmp', (exists) => {
+      exists ? '' : fs.mkdirSync('tmp');
       fs.writeFile('tmp/imooc.json', JSON.stringify(lessonData, null, 2), (err) => {
         if (err) {
           throw err;
@@ -46,7 +44,4 @@ function getHtml(url) {
   })
 }
 
-// getHtml(rootHost + '/course/list?page=' + page);
-fs.exists('tmp', (exists) =>{
-  console.log(exists)
-})
+getHtml(rootHost + '/course/list?page=' + page);
