@@ -1,3 +1,5 @@
+import { Z_FIXED } from 'zlib';
+
 /**
  * 爬取慕课网免费课程数据
  * created by itellboy on 2018-4-25
@@ -44,4 +46,7 @@ function getHtml(url) {
   })
 }
 
-getHtml(rootHost + '/course/list?page=' + page);
+// getHtml(rootHost + '/course/list?page=' + page);
+fs.exists('tmp', (exists) =>{
+  console.log(exists)
+})
