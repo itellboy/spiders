@@ -31,15 +31,16 @@ function getHtml(url) {
     })
 
     getHtml(rootHost + '/course/list?page=' + (++page));
-
   }).catch((e) => {
-
-    fs.writeFile('tmp/imooc.json', JSON.stringify(lessonData, null, 2), (err) => {
-      if (err) {
-        throw err;
-      }
-      console.log('获取成功')
-    });
+    fs.exists(__dirname + '/tmp', (exists) => {
+      exists ? '' : fs.mkdir('tmp');
+      fs.writeFile('tmp/imooc.json', JSON.stringify(lessonData, null, 2), (err) => {
+        if (err) {
+          throw err;
+        }
+        console.log('获取成功')
+      });
+    })
   })
 }
 
