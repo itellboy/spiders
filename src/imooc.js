@@ -12,7 +12,7 @@ const rootHost = 'https://www.imooc.com';
 // 课程数据
 let lessonData = [];
 // 页数
-let page = 35;
+let page = 1;
 /**
  * 抓取html页面
  * @param {页面url} url 
@@ -23,13 +23,19 @@ function getHtml(url) {
     let $ = cheerio.load(resp.data);
 
     Array.from($('.course-card-container')).forEach(item => {
+      let tags = [];
+      Array.from($(item).find('.course-label label')).forEach((labelItem) => {
+        tags.push($(labelItem).text());
+      });
       lessonData.push({
         title: $(item).find('h3').text(),
         desc: $(item).find('.course-card-desc').text(),
-        href: rootHost + $(item).find('.course-card').attr('href')
+        href: rootHost + $(item).find('.course-card').attr('href'),
+        tags: tags,
+        level: $(item).find('.course-card-info span').first().text(),
+        number: $($(item).find('.course-card-info span').first()).next().text()
       })
     })
-
     getHtml(rootHost + '/course/list?page=' + (++page));
   }).catch((e) => {
     fs.exists('tmp', (exists) => {
