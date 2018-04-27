@@ -38,15 +38,13 @@ function getHtml(url) {
     })
     getHtml(rootHost + '/course/list?page=' + (++page));
   }).catch((e) => {
-    fs.exists('tmp', (exists) => {
-      exists ? '' : fs.mkdirSync('tmp');
-      fs.writeFile('tmp/imooc.json', JSON.stringify(lessonData, null, 2), (err) => {
-        if (err) {
-          throw err;
-        }
-        console.log('获取成功')
-      });
-    })
+    console.log('爬取结束');
+    fs.writeFile('mock/imooc.json', JSON.stringify(lessonData, null, 2), (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log('获取成功');
+    });
   })
 }
 
