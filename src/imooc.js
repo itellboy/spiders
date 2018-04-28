@@ -13,6 +13,8 @@ const rootHost = 'https://www.imooc.com';
 let lessonData = [];
 // 页数
 let page = 1;
+// 爬取结束标志
+let flag = true;
 
 /**
  * 写入文件
@@ -36,13 +38,11 @@ function writeFile() {
 
 /**
  * 抓取页面
- * @param {待抓取url} url 
  */
-function getHtml(url) {
+function getHtml() {
   console.log('开始抓取第' + page + '页...');
-  axios.get(url).then((resp) => {
+  return axios.get(rootHost + '/course/list?page=' + page).then((resp) => {
     let $ = cheerio.load(resp.data);
-
     Array.from($('.course-card-container')).forEach(item => {
       let tags = [];
       Array.from($(item).find('.course-label label')).forEach((labelItem) => {
@@ -56,13 +56,22 @@ function getHtml(url) {
         level: $(item).find('.course-card-info span').first().text(),
         number: $($(item).find('.course-card-info span').first()).next().text()
       })
-    })
-    getHtml(rootHost + '/course/list?page=' + (++page));
+    });
+    console.log('第' + page + '页数据获取完毕');
+    console.log('--')
   }).catch((e) => {
-    console.log('爬取结束');
-    writeFile();
+    flag = false;
   })
 }
 
 // 执行函数
-getHtml(rootHost + '/course/list?page=' + page);
+(async function () {
+  console.log('爬取开始...')
+  let startTime = Date.now();
+  while (flag) {
+    await getHtml();
+    page++;
+  }
+  await writeFile();
+  console.log('爬取结束,用时: ' + (Date.now() - startTime) / 1000 + 's');
+})()
