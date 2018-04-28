@@ -1,4 +1,4 @@
-node_modules
-tmp
-html
-mock/*.json
+/node_modules
+/tmp
+/html
+/mock/*.json
