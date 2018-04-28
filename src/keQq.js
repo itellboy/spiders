@@ -1,5 +1,5 @@
 /**
- * 爬取慕课网免费课程数据（静态页面抓取）
+ * 爬取腾讯课堂免费课程数据（静态页面抓取）
  * created by itellboy on 2018-4-25
  */
 
@@ -7,8 +7,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-// 慕课网域名
-const rootHost = 'https://www.imooc.com';
+// 腾讯课堂域名
+const rootHost = 'https://ke.qq.com';
 // 课程数据
 let lessonData = [];
 // 页数
@@ -28,7 +28,7 @@ function writeFile() {
   if (!exists) {
     fs.mkdirSync('mock');
   }
-  fs.writeFile('mock/imooc.json', JSON.stringify(lesson, null, 2), (err) => {
+  fs.writeFile('mock/keQq.json', JSON.stringify(lesson, null, 2), (err) => {
     if (err) {
       throw err;
     }
@@ -43,23 +43,24 @@ function getHtml() {
   console.log('开始抓取第' + page + '页...');
   return axios.get(rootHost + '/course/list?page=' + page).then((resp) => {
     let $ = cheerio.load(resp.data);
-    Array.from($('.course-card-container')).forEach(item => {
-      let tags = [];
-      Array.from($(item).find('.course-label label')).forEach((labelItem) => {
-        tags.push($(labelItem).text());
-      });
+    let lessonDomArr = Array.from($('.market-bd.market-bd-6.course-list.course-card-list-multi-wrap .course-card-item'));
+    if(lessonDomArr.length == 0){
+      flag = false;
+    }
+    lessonDomArr.forEach(item => {
       lessonData.push({
-        title: $(item).find('h3').text().trim(),
-        desc: $(item).find('.course-card-desc').text().trim(),
-        href: rootHost + $(item).find('.course-card').attr('href').trim(),
-        tags: tags,
-        level: $(item).find('.course-card-info span').first().text().trim(),
-        number: $($(item).find('.course-card-info span').first()).next().text().trim()
+        title: $(item).find('h4.item-tt a').text().trim(),
+        href: rootHost + '/course/' + $(item).find('.item-img-link').attr('data-id'),
+        status: $(item).find('.item-status .item-status-step').text().trim(),
+        provider: $(item).find('.item-source a').text().trim(),
+        price: $(item).find('.item-line.item-line--bottom .line-cell').text().trim(),
+        number: $(item).find('.line-cell.item-user').text().trim()
       })
     });
     console.log('第' + page + '页数据获取完毕');
     console.log('--')
   }).catch((e) => {
+    console.log(e)
     flag = false;
   })
 }

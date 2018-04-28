@@ -1,5 +1,5 @@
 /**
- * 爬取慕课网免费课程数据（静态页面抓取）
+ * 爬取学堂在线免费课程数据（静态页面抓取）
  * created by itellboy on 2018-4-25
  */
 
@@ -7,8 +7,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-// 慕课网域名
-const rootHost = 'https://www.imooc.com';
+// 学堂在线域名
+const rootHost = 'http://www.xuetangx.com';
 // 课程数据
 let lessonData = [];
 // 页数
@@ -28,7 +28,7 @@ function writeFile() {
   if (!exists) {
     fs.mkdirSync('mock');
   }
-  fs.writeFile('mock/imooc.json', JSON.stringify(lesson, null, 2), (err) => {
+  fs.writeFile('mock/xuetangx.json', JSON.stringify(lesson, null, 2), (err) => {
     if (err) {
       throw err;
     }
@@ -41,25 +41,26 @@ function writeFile() {
  */
 function getHtml() {
   console.log('开始抓取第' + page + '页...');
-  return axios.get(rootHost + '/course/list?page=' + page).then((resp) => {
+  return axios.get(rootHost + '/courses?page=' + page).then((resp) => {
     let $ = cheerio.load(resp.data);
-    Array.from($('.course-card-container')).forEach(item => {
-      let tags = [];
-      Array.from($(item).find('.course-label label')).forEach((labelItem) => {
-        tags.push($(labelItem).text());
-      });
+    let lessonDomArr = Array.from($('.courses_list_mode .list_mode_wrap .list_style').children());
+    if(lessonDomArr.length == 0){
+      console.log('到最后一页')
+      flag = false;
+    }
+    lessonDomArr.forEach(item => {
       lessonData.push({
-        title: $(item).find('h3').text().trim(),
-        desc: $(item).find('.course-card-desc').text().trim(),
-        href: rootHost + $(item).find('.course-card').attr('href').trim(),
-        tags: tags,
-        level: $(item).find('.course-card-info span').first().text().trim(),
-        number: $($(item).find('.course-card-info span').first()).next().text().trim()
+        title: $(item).find('.coursetitle').text().trim(),
+        href: rootHost + $(item).find('.img a').attr('href'),
+        teacher: $(item).find('.teacher .name ul li span').first().text().trim(),
+        university: $(item).find('.teacher .name ul li span').first().next().text().trim(),
+        desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi,''),
       })
     });
     console.log('第' + page + '页数据获取完毕');
     console.log('--')
   }).catch((e) => {
+    console.log(e)
     flag = false;
   })
 }
