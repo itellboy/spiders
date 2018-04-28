@@ -50,14 +50,17 @@ function analyzePage(content) {
  * 点击下一页
  */
 async function goNextPage() {
-  console.log('前往下一页');
+  console.log('前往第 ' + (currentPage + 1) + '页');
   await page.evaluate(function () {
     var nextPageButton = document.querySelector('.ux-pager_btn.ux-pager_btn__next a');
     nextPageButton.click();
-    return nextPageButton.classList.contains('z-dis');
+    return document.querySelector('.ux-pager_btn.ux-pager_btn__next').classList.contains('z-dis');
   }).then(function (isClick) {
-    flag = !isClick;
-    currentPage++;
+    console.log(isClick)
+    if(currentPage == 4){
+      flag = false;
+    }
+    currentPage ++;
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
