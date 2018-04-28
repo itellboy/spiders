@@ -113,11 +113,13 @@ function writeFile() {
  * 自动执行
  */
 (async function () {
+  let startTime = Date.now();
   console.log('初始化..')
   await phantomInit();
   console.log('初始化完毕!')
   await getHtml();
 
   await instance.exit();
-  console.log('程序结束')
+  console.log('程序结束');
+  console.log('爬取结束,用时: ' + (Date.now() - startTime) / 1000 + 's');
 }());
