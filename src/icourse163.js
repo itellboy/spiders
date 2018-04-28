@@ -1,5 +1,5 @@
 /**
- * 爬取中国大学MOOC课程数据
+ * 爬取中国大学MOOC课程数据（动态页面抓取）
  * created by itellboy on 2018-4-27
  */
 
@@ -7,8 +7,12 @@ const fs = require('fs');
 const phantom = require('phantom');
 const cheerio = require('cheerio');
 
+// phantom 全局变量
 let instance = {};
 let page = {};
+
+// 抓取网址
+let rootHost = 'https://www.icourse163.org'
 
 // 课程数据
 let lessonData = [];
@@ -22,7 +26,7 @@ let currentPage = 1;
 async function phantomInit() {
   instance = await phantom.create();
   page = await instance.createPage();
-  let status = await page.open('https://www.icourse163.org/category/all');
+  let status = await page.open(rootHost + '/category/all');
 }
 
 /**
@@ -30,20 +34,27 @@ async function phantomInit() {
  * @param {页面内容} content
  */
 function analyzePage(content) {
-  console.log('正在分析第' + currentPage + '页数据');
   let $ = cheerio.load(content);
+  console.log('正在分析第' + currentPage + '页数据');
   Array.from($('.m-course-list .u-clist')).forEach((item) => {
     lessonData.push({
       title: $(item).find('.u-course-name').text().trim(),
       desc: $(item).find('.p5.brief.f-ib.f-f0.f-cb').text().trim(),
+      href: rootHost + $(item).attr('data-href'),
       university: $(item).find('.t21.f-fc9').text().trim(),
       hot: $(item).find('.hot').text().trim(),
       time: $(item).find('.over .txt').text().trim(),
       person: $(item).find('.t21.f-fc9').next().text().trim(),
     })
-  })
+  });
   console.log('第' + currentPage + '页数据分析完毕');
   console.log('---')
+
+  // 如果当前页等于最后一页，终止爬取
+  if ($('.ux-pager_itm a').last().text().trim() == $('.ux-pager_itm.z-crt').text().trim()) {
+    flag = false;
+    console.log('已到达最后一页')
+  }
 }
 
 /**
@@ -54,13 +65,9 @@ async function goNextPage() {
   await page.evaluate(function () {
     var nextPageButton = document.querySelector('.ux-pager_btn.ux-pager_btn__next a');
     nextPageButton.click();
-    return document.querySelector('.ux-pager_btn.ux-pager_btn__next').classList.contains('z-dis');
-  }).then(function (isClick) {
-    console.log(isClick)
-    if(currentPage == 4){
-      flag = false;
-    }
-    currentPage ++;
+  }).then(() => {
+    currentPage++;
+    // 等数据加载完继续往下执行，暂定5秒
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -86,7 +93,15 @@ async function getHtml() {
  * 将获取json数据写入文件
  */
 function writeFile() {
-  fs.writeFile('mock/icourse163.json', JSON.stringify(lessonData, null, 2), (err) => {
+  let lesson = {
+    length: lessonData.length,
+    data: lessonData
+  }
+  let exists = fs.existsSync('mock');
+  if (!exists) {
+    fs.mkdirSync('mock');
+  }
+  fs.writeFile('mock/icourse163.json', JSON.stringify(lesson, null, 2), (err) => {
     if (err) {
       console.log('存储文件错误');
     }

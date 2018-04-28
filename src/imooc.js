@@ -1,5 +1,5 @@
 /**
- * 爬取慕课网免费课程数据
+ * 爬取慕课网免费课程数据（静态页面抓取）
  * created by itellboy on 2018-4-25
  */
 
@@ -13,9 +13,30 @@ const rootHost = 'https://www.imooc.com';
 let lessonData = [];
 // 页数
 let page = 1;
+
 /**
- * 抓取html页面
- * @param {页面url} url 
+ * 写入文件
+ */
+function writeFile() {
+  let lesson = {
+    length: lessonData.length,
+    data: lessonData
+  }
+  let exists = fs.existsSync('mock');
+  if (!exists) {
+    fs.mkdirSync('mock');
+  }
+  fs.writeFile('mock/imooc.json', JSON.stringify(lesson, null, 2), (err) => {
+    if (err) {
+      throw err;
+    }
+    console.log('写入文件成功');
+  });
+}
+
+/**
+ * 抓取页面
+ * @param {待抓取url} url 
  */
 function getHtml(url) {
   console.log('开始抓取第' + page + '页...');
@@ -39,13 +60,9 @@ function getHtml(url) {
     getHtml(rootHost + '/course/list?page=' + (++page));
   }).catch((e) => {
     console.log('爬取结束');
-    fs.writeFile('mock/imooc.json', JSON.stringify(lessonData, null, 2), (err) => {
-      if (err) {
-        throw err;
-      }
-      console.log('获取成功');
-    });
+    writeFile();
   })
 }
 
+// 执行函数
 getHtml(rootHost + '/course/list?page=' + page);
