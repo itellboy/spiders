@@ -54,7 +54,8 @@ function getHtml() {
         href: rootHost + $(item).find('.course-card').attr('href').trim(),
         tags: tags,
         level: $(item).find('.course-card-info span').first().text().trim(),
-        number: $($(item).find('.course-card-info span').first()).next().text().trim()
+        number: $($(item).find('.course-card-info span').first()).next().text().trim(),
+        source: 'imooc',
       })
     });
     console.log('第' + page + '页数据获取完毕');

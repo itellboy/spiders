@@ -55,6 +55,7 @@ function getHtml() {
         teacher: $(item).find('.teacher .name ul li span').first().text().trim(),
         university: $(item).find('.teacher .name ul li span').first().next().text().trim(),
         desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi,''),
+        source: 'xuetangx',
       })
     });
     console.log('第' + page + '页数据获取完毕');

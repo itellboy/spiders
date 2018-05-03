@@ -44,17 +44,19 @@ function getHtml() {
   return axios.get(rootHost + '/course/list?page=' + page).then((resp) => {
     let $ = cheerio.load(resp.data);
     let lessonDomArr = Array.from($('.market-bd.market-bd-6.course-list.course-card-list-multi-wrap .course-card-item'));
-    if(lessonDomArr.length == 0){
+    if (lessonDomArr.length == 0) {
       flag = false;
     }
     lessonDomArr.forEach(item => {
       lessonData.push({
         title: $(item).find('h4.item-tt a').text().trim(),
         href: rootHost + '/course/' + $(item).find('.item-img-link').attr('data-id'),
+        desc: '',
         status: $(item).find('.item-status .item-status-step').text().trim(),
         provider: $(item).find('.item-source a').text().trim(),
         price: $(item).find('.item-line.item-line--bottom .line-cell').text().trim(),
-        number: $(item).find('.line-cell.item-user').text().trim()
+        number: $(item).find('.line-cell.item-user').text().trim(),
+        source: 'keQq',
       })
     });
     console.log('第' + page + '页数据获取完毕');

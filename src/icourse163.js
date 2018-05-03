@@ -45,6 +45,7 @@ function analyzePage(content) {
       hot: $(item).find('.hot').text().trim(),
       time: $(item).find('.over .txt').text().trim(),
       person: $(item).find('.t21.f-fc9').next().text().trim(),
+      source: 'icourse163',
     })
   });
   console.log('第' + currentPage + '页数据分析完毕');
