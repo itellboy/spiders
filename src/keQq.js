@@ -51,7 +51,7 @@ function getHtml() {
       lessonData.push({
         title: $(item).find('h4.item-tt a').text().trim(),
         href: rootHost + '/course/' + $(item).find('.item-img-link').attr('data-id'),
-        desc: '',
+        desc: $(item).find('h4.item-tt a').text().trim(),
         status: $(item).find('.item-status .item-status-step').text().trim(),
         provider: $(item).find('.item-source a').text().trim(),
         price: $(item).find('.item-line.item-line--bottom .line-cell').text().trim(),

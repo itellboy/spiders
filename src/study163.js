@@ -52,7 +52,7 @@ async function getData() {
       lessonData = lessonData.concat(resp.data.result.list.map((item) => {
         let tempItem = {
           title: item.productName,
-          desc: item.description,
+          desc: item.description || item.productName,
           href: rootHost + '/course/introduction/' + item.courseId + '.htm',
           provider: item.provider,
           teacher: item.lectorName,

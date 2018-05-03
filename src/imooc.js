@@ -50,7 +50,7 @@ function getHtml() {
       });
       lessonData.push({
         title: $(item).find('h3').text().trim(),
-        desc: $(item).find('.course-card-desc').text().trim(),
+        desc: $(item).find('.course-card-desc').text().trim() || $(item).find('h3').text().trim(),
         href: rootHost + $(item).find('.course-card').attr('href').trim(),
         tags: tags,
         level: $(item).find('.course-card-info span').first().text().trim(),

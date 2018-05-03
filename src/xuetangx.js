@@ -54,7 +54,7 @@ function getHtml() {
         href: rootHost + $(item).find('.img a').attr('href'),
         teacher: $(item).find('.teacher .name ul li span').first().text().trim(),
         university: $(item).find('.teacher .name ul li span').first().next().text().trim(),
-        desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi,''),
+        desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi,'') || $(item).find('.coursetitle').text().trim(),
         source: 'xuetangx',
       })
     });

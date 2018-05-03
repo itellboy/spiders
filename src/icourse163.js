@@ -39,7 +39,7 @@ function analyzePage(content) {
   Array.from($('.m-course-list .u-clist')).forEach((item) => {
     lessonData.push({
       title: $(item).find('.u-course-name').text().trim(),
-      desc: $(item).find('.p5.brief.f-ib.f-f0.f-cb').text().trim(),
+      desc: $(item).find('.p5.brief.f-ib.f-f0.f-cb').text().trim() || $(item).find('.u-course-name').text().trim(),
       href: rootHost + $(item).attr('data-href'),
       university: $(item).find('.t21.f-fc9').text().trim(),
       hot: $(item).find('.hot').text().trim(),
