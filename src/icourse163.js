@@ -47,6 +47,7 @@ function analyzePage(content) {
       person: $(item).find('.t21.f-fc9').next().text().trim(),
       source: 'icourse163',
     })
+    console.log('课程标题：' + $(item).find('.u-course-name').text().trim());
   });
   console.log('第' + currentPage + '页数据分析完毕');
   console.log('---')
@@ -72,7 +73,7 @@ async function goNextPage() {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
-      }, 5000);
+      }, 3000);
     })
   });
 }

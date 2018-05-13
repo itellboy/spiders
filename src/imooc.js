@@ -57,6 +57,7 @@ function getHtml() {
         number: $($(item).find('.course-card-info span').first()).next().text().trim(),
         source: 'imooc',
       })
+      console.log('课程标题：' + $(item).find('h3').text().trim());
     });
     console.log('第' + page + '页数据获取完毕');
     console.log('--')

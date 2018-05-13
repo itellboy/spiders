@@ -44,7 +44,7 @@ function getHtml() {
   return axios.get(rootHost + '/courses?page=' + page).then((resp) => {
     let $ = cheerio.load(resp.data);
     let lessonDomArr = Array.from($('.courses_list_mode .list_mode_wrap .list_style').children());
-    if(lessonDomArr.length == 0){
+    if (lessonDomArr.length == 0) {
       console.log('到最后一页')
       flag = false;
     }
@@ -54,9 +54,10 @@ function getHtml() {
         href: rootHost + $(item).find('.img a').attr('href'),
         teacher: $(item).find('.teacher .name ul li span').first().text().trim(),
         university: $(item).find('.teacher .name ul li span').first().next().text().trim(),
-        desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi,'') || $(item).find('.coursetitle').text().trim(),
+        desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi, '') || $(item).find('.coursetitle').text().trim(),
         source: 'xuetangx',
-      })
+      });
+      console.log('课程标题： ' + $(item).find('.coursetitle').text().trim());
     });
     console.log('第' + page + '页数据获取完毕');
     console.log('--')

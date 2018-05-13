@@ -59,6 +59,7 @@ async function getData() {
           learnerCount: item.learnerCount,
           source: 'study163',
         }
+        console.log('课程标题：' + tempItem.title);
         return tempItem;
       }));
     } else {
