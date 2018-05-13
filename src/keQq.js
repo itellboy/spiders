@@ -58,7 +58,7 @@ function getHtml() {
         number: $(item).find('.line-cell.item-user').text().trim(),
         source: 'keQq',
       })
-      cosnole.log('课程标题：' + $(item).find('h4.item-tt a').text().trim());
+      console.log('课程标题：' + $(item).find('h4.item-tt a').text().trim());
     });
     console.log('第' + page + '页数据获取完毕');
     console.log('--')
