@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/imooc.js"
+    "imooc": "node src/imooc.js",
+    "icourse163": "node src/icourse163.js",
+    "study163": "node src/study163.js",
+    "keQq": "node src/keQq.js",
+    "xuetangx": "node src/xuetangx.js"
   },
   "author": "",
   "license": "ISC",
