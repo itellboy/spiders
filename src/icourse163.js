@@ -42,7 +42,7 @@ function analyzePage(content) {
       desc: $(item).find('.p5.brief.f-ib.f-f0.f-cb').text().trim() || $(item).find('.u-course-name').text().trim(),
       href: rootHost + $(item).attr('data-href'),
       university: $(item).find('.t21.f-fc9').text().trim(),
-      hot: $(item).find('.hot').text().trim(),
+      number: parseInt($(item).find('.hot').text().trim()),
       time: $(item).find('.over .txt').text().trim(),
       person: $(item).find('.t21.f-fc9').next().text().trim(),
       source: 'icourse163',

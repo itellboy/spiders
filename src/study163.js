@@ -56,7 +56,7 @@ async function getData() {
           href: rootHost + '/course/introduction/' + item.courseId + '.htm',
           provider: item.provider,
           teacher: item.lectorName,
-          learnerCount: item.learnerCount,
+          number: parseInt(item.learnerCount),
           source: 'study163',
         }
         console.log('课程标题：' + tempItem.title);

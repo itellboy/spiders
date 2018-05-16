@@ -55,7 +55,7 @@ function getHtml() {
         status: $(item).find('.item-status .item-status-step').text().trim(),
         provider: $(item).find('.item-source a').text().trim(),
         price: $(item).find('.item-line.item-line--bottom .line-cell').text().trim(),
-        number: $(item).find('.line-cell.item-user').text().trim(),
+        number: parseInt($(item).find('.line-cell.item-user').text().trim()),
         source: 'keQq',
       })
       console.log('课程标题：' + $(item).find('h4.item-tt a').text().trim());

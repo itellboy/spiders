@@ -49,15 +49,24 @@ function getHtml() {
       flag = false;
     }
     lessonDomArr.forEach(item => {
+      let number = $(item).find('.teacher .name ul li').first().next().next().text().trim();
+      if (number.indexOf('万') != -1) {
+        number = number.replace(/[^0-9]/ig, '') + '0000';
+      } else {
+        number = number.replace(/[^0-9]/ig, '');
+      }
+      number = parseInt(number) || 0;
       lessonData.push({
         title: $(item).find('.coursetitle').text().trim(),
         href: rootHost + $(item).find('.img a').attr('href'),
         teacher: $(item).find('.teacher .name ul li span').first().text().trim(),
         university: $(item).find('.teacher .name ul li span').first().next().text().trim(),
+        number: number,
         desc: $(item).find('.txt_all .txt').text().trim().replace(/简介|\n\t/gi, '') || $(item).find('.coursetitle').text().trim(),
         source: 'xuetangx',
       });
       console.log('课程标题： ' + $(item).find('.coursetitle').text().trim());
+      console.log(number);
     });
     console.log('第' + page + '页数据获取完毕');
     console.log('--')
